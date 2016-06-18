@@ -5,15 +5,23 @@ const createApp = require('./app');
 var Line = require('../')(THREE);
 var BasicShader = require('../shaders/basic')(THREE);
 var DashShader = require('./shader-dash')(THREE);
+var TwoDLineShader = require('./shader-2Dline')(THREE);
 var GradientShader = require('./shader-gradient')(THREE);
 
 var normalize = require('normalize-path-scale');
 var arc = require('arc-to');
 var curve = require('adaptive-bezier-curve');
 
+// test normal
+var getNormals = require('polyline-normals');
+var my_path = [ [0, 5], [0, 10], [10, 20] ];
+var normals = getNormals(my_path, false);
+console.log(normals);
+
+
 var curvePath = path1();
 var circlePath = normalize(arc(0, 0, 25, 0, Math.PI * 2, false, 64));
-var boxPath = [[0, 0], [1, 0], [1, 1], [0, 1]];
+var boxPath = [[0, 0], [2, 2], [5,-6]];
 
 var app = createApp({ antialias: true });
 app.renderer.setClearColor('#1d1d1d', 1);
@@ -36,38 +44,52 @@ function setup () {
   circlePath.pop();
   var circleGeometry = Line(circlePath, { distances: true, closed: true });
   var dashMat = new THREE.ShaderMaterial(DashShader({
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
+    diffuse: 0x5cd7ff
   }));
   var mesh2 = new THREE.Mesh(circleGeometry, dashMat);
   mesh2.position.x = -2;
-  mesh2.scale.multiplyScalar(0.5);
+  //mesh2.scale.multiplyScalar(0.5);
   app.scene.add(mesh2);
+
+  // // Our 2D line
+  circlePath.pop();
+  var twoDGeometry = Line(boxPath, { distances: true, closed: false, diffuse: 0x5cd7ff });
+  var twoDMat = new THREE.ShaderMaterial(TwoDLineShader({
+    thickness: 1,
+    side: THREE.DoubleSide,
+    diffuse: 0x5cd7ff
+  }));
+  var twoDMesh = new THREE.Mesh(twoDGeometry, twoDMat);
+  twoDMesh.position.y = 0.5;
+  twoDMesh.position.z = 0.5;
+  app.scene.add(twoDMesh);
 
   // // Our glowing box
   circlePath.pop();
-  var boxGeometry = Line(boxPath, { distances: true, closed: true });
+  var boxGeometry = Line(boxPath, { distances: true, closed: false, diffuse: 0x5cd7ff });
   var boxMat = new THREE.ShaderMaterial(GradientShader({
-    thickness: 0.3,
+    thickness: 1,
     side: THREE.DoubleSide
   }));
-  var boxMesh = new THREE.Mesh(boxGeometry, boxMat);
+  var boxMesh = new THREE.Mesh(boxGeometry, mat);
   boxMesh.position.y = 0.5;
   boxMesh.position.z = 0.5;
-  boxMesh.scale.multiplyScalar(0.5);
+  // boxMesh.scale.multiplyScalar(0.5);
   app.scene.add(boxMesh);
 
   createLoop(function (dt) {
-    time += dt / 1000;
-    // animate some thickness stuff
-    mat.uniforms.thickness.value = Math.sin(time * 0.5) * 0.2;
-
-    // animate some dash properties
-    dashMat.uniforms.dashDistance.value = (Math.sin(time) / 2 + 0.5) * 0.5;
-    dashMat.uniforms.dashSteps.value = (Math.sin(Math.cos(time)) / 2 + 0.5) * 24;
-
-    // animate gradient
-    boxMat.uniforms.time.value = time;
-
+  //   time += dt / 1000;
+  //   // animate some thickness stuff
+  //   mat.uniforms.thickness.value = Math.sin(time * 0.5) * 0.2;
+  //
+  //   // animate some dash properties
+  //   dashMat.uniforms.dashDistance.value = (Math.sin(time) / 2 + 0.5) * 0.5;
+  //   dashMat.uniforms.dashSteps.value = (Math.sin(Math.cos(time)) / 2 + 0.5) * 24;
+  //
+  //   // animate gradient
+  //   // boxMat.uniforms.time.value = time;
+  //
     app.updateProjectionMatrix();
     app.renderer.render(app.scene, app.camera);
   }).start();

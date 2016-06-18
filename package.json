@@ -34,7 +34,7 @@
     "uglify-js": "^2.4.15"
   },
   "scripts": {
-    "build": "browserify test/index.js | uglifyjs -cm > bundle.js",
+    "build": "browserify -d test/index.js > bundle.js",
     "start": "budo test/index.js:bundle.js --live",
     "test": "semistandard"
   },
