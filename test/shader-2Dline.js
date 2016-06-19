@@ -15,6 +15,8 @@ module.exports = function (THREE) {
         dashDistance: { type: 'f', value: 0.2 },
         dashSmooth: { type: 'f', value: 0.01 },
 
+        texture1: {type: 't', value: opt.texture },
+
         dashSize: { type: 'f', value: number(opt.dashSize, 1.0) },
         totalSize: { type: 'f', value: number(opt.totalSize, 3.0) }
       },
@@ -28,6 +30,8 @@ module.exports = function (THREE) {
         'attribute vec2 lineNormal;',
         '//attribute float lineDistance;',
         'varying float lineU;',
+        'varying float vRotation;',
+        'varying vec3 pos;',
 
         '#include <common>',
         '#include <color_pars_vertex>',
@@ -37,6 +41,8 @@ module.exports = function (THREE) {
         'void main() {',
           '#include <color_vertex>',
           'vLineDistance =  lineDistance;',
+          'pos = position;',
+          'vRotation = 0.0;',
         'lineU = lineDistance;',
         'vec3 pointPos = position.xyz + vec3(lineNormal * thickness/2.0 * lineMiter, 0.0);',
         'gl_Position = projectionMatrix * modelViewMatrix * vec4( pointPos, 1.0 );',
@@ -45,6 +51,7 @@ module.exports = function (THREE) {
         '}'
       ].join('\n'),
       fragmentShader: [
+          'uniform sampler2D texture1;',
           'uniform float opacity;',
            'uniform float dashSize;',
           'uniform float totalSize;',
@@ -62,23 +69,22 @@ module.exports = function (THREE) {
         'uniform float dashSteps;',
         'uniform float dashSmooth;',
         'uniform float dashDistance;',
+          'varying vec3 pos;',
+          'varying float vRotation;',
+
 
         'void main() {',
-          'if ( mod( vLineDistance, totalSize ) > dashSize ) {',
-            '//gl_FragColor = vec4( diffuse2, opacity );',
-          '//return;',
-            'discard;',
-          '}',
 
-        'vec3 outgoingLight = vec3( 0.0 );',
-        'vec4 diffuseColor = vec4( diffuse, opacity );',
+        'float tx = mod(pos.x,1.0);',
+        'float ty = mod(pos.y,5.0) * 0.2;',
+        'float mid = 0.5;',
+        'vec2 rotated = vec2(cos(vRotation) * (tx - mid) + sin(vRotation) * (ty - mid) + mid,',
+        'cos(vRotation) * (ty - mid) - sin(vRotation) * (tx - mid) + mid);',
+        'vec4 rotatedTexture = texture2D( texture1,  rotated);',
+        'gl_FragColor = rotatedTexture;',
 
         '#include <logdepthbuf_fragment>',
         '#include <color_fragment>',
-
-        'outgoingLight = diffuseColor.rgb; // simple shader',
-
-        'gl_FragColor = vec4( outgoingLight, diffuseColor.a );',
 
         '#include <premultiplied_alpha_fragment>',
         '#include <tonemapping_fragment>',

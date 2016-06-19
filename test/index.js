@@ -21,7 +21,7 @@ console.log(normals);
 
 var curvePath = path1();
 var circlePath = normalize(arc(0, 0, 25, 0, Math.PI * 2, false, 64));
-var boxPath = [[0, 0], [2, 2],[10,2]];
+var boxPath = [[0, 0], [2, 2],[10,2],[15,10]];
 
 var app = createApp({ antialias: true });
 app.renderer.setClearColor('#1d1d1d', 1);
@@ -53,22 +53,31 @@ function setup () {
   // app.scene.add(mesh2);
 
   // // Our 2D line
-  circlePath.pop();
-  var twoDGeometry = Line(boxPath, { distances: true, closed: false, diffuse: 0x5cd7ff });
-  twoDGeometry.lineDistancesNeedUpdate = true;
-  var twoDMat = new THREE.ShaderMaterial(TwoDLineShader({
-    thickness: 1,
-    side: THREE.DoubleSide,
-    diffuse: 0x00ff00,
-    diffuse2: 0xff0000,
+  // circlePath.pop();
+  var loader = new THREE.TextureLoader();
 
-    dashSize:0.5,
-    totalSize: 1.0
-  }));
-  var twoDMesh = new THREE.Mesh(twoDGeometry, twoDMat);
-  twoDMesh.position.y = 0.5;
-  twoDMesh.position.z = 0.5;
-  app.scene.add(twoDMesh);
+  loader.load('images/direction.png', function ( texture ) {
+
+
+    var twoDGeometry = Line(boxPath, {distances: true, closed: false, diffuse: 0x5cd7ff});
+    twoDGeometry.lineDistancesNeedUpdate = true;
+    var twoDMat = new THREE.ShaderMaterial(TwoDLineShader({
+      thickness: 1,
+      side: THREE.DoubleSide,
+      diffuse: 0x00ff00,
+      diffuse2: 0xff0000,
+
+      texture: texture,
+
+      dashSize: 0.5,
+      totalSize: 1.0
+    }));
+    var twoDMesh = new THREE.Mesh(twoDGeometry, twoDMat);
+    twoDMesh.position.y = 0.5;
+    twoDMesh.position.z = 0.5;
+    app.scene.add(twoDMesh);
+
+  } );
 
   // // // Our glowing box
   // circlePath.pop();
