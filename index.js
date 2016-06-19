@@ -74,8 +74,12 @@ module.exports = function createLineMesh (THREE) {
     var c = 0;
     var dIndex = 0;
     var indexArray = attrIndex.array;
-
-    path.forEach(function (point, pointIndex, list) {
+    var d = 0;
+    var d_up = 0.0 ;
+    var d_down = 0.0;
+    var nnn = normals;
+    var mmm = [ [1,2],[2,3] ];
+    path.forEach(function (normals,point, pointIndex,list) {
       var i = index;
       indexArray[c++] = i + 0;
       indexArray[c++] = i + 1;
@@ -88,11 +92,40 @@ module.exports = function createLineMesh (THREE) {
       attrPosition.setXYZ(index++, point[0], point[1], 0);
 
       if (attrDistance) {
-        var d = pointIndex / (list.length - 1);
-        attrDistance.setX(dIndex++, d);
-        attrDistance.setX(dIndex++, d);
+        // var d = pointIndex / (list.length - 1);
+        // attrDistance.setX(dIndex++, d);
+        // attrDistance.setX(dIndex++, d);
+        var rd;
+        if ( pointIndex > 0 ) {
+          var v1 = new THREE.Vector2(path[pointIndex][0],path[pointIndex][1]);
+          var v2 = new THREE.Vector2(path[pointIndex-1][0],path[pointIndex-1][1]);
+          d += v1.distanceTo( v2 );
+          var rd = v1.distanceTo( v2 );
+
+          var miter = normals[pointIndex][1];
+          var width = 1.0;
+          var x = normals[pointIndex][0][0];
+          var y = normals[pointIndex][0][1];
+          var gg = Math.sqrt(x*x+y*y);
+          gg = gg* width/2.0 * miter;
+
+          // x = x+ x * width/2.0 * miter;
+          // y = y+ y * width/2.0 * miter;
+          var m_w = gg*gg-(width/2.0)*(width/2.0);
+          var dd = Math.sqrt(m_w);
+          d_up += rd-dd;
+          d_down += rd+dd;
+
+        }
+
+
+
+        // d = 0.6;
+
+        attrDistance.setX(dIndex++, d_up);
+        attrDistance.setX(dIndex++, d_down);
       }
-    });
+    }.bind(null,normals) );
 
     var nIndex = 0;
     var mIndex = 0;
