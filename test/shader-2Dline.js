@@ -42,7 +42,7 @@ module.exports = function (THREE) {
           '#include <color_vertex>',
           'vLineDistance =  lineDistance;',
           'pos = position;',
-          'vRotation = 0.0;',
+          'vRotation = 0.5;',
         'lineU = lineDistance;',
         'vec3 pointPos = position.xyz + vec3(lineNormal * thickness/2.0 * lineMiter, 0.0);',
         'gl_Position = projectionMatrix * modelViewMatrix * vec4( pointPos, 1.0 );',
@@ -76,7 +76,7 @@ module.exports = function (THREE) {
         'void main() {',
 
         'float tx = mod(pos.x,1.0);',
-        'float ty = mod(pos.y,5.0) * 0.2;',
+        'float ty = mod(pos.y,1.0)*0.2;',
         'float mid = 0.5;',
         'vec2 rotated = vec2(cos(vRotation) * (tx - mid) + sin(vRotation) * (ty - mid) + mid,',
         'cos(vRotation) * (ty - mid) - sin(vRotation) * (tx - mid) + mid);',

@@ -113,8 +113,8 @@ module.exports = function createLineMesh (THREE) {
           // y = y+ y * width/2.0 * miter;
           var m_w = gg*gg-(width/2.0)*(width/2.0);
           var dd = Math.sqrt(m_w);
-          d_up += rd-dd;
-          d_down += rd+dd;
+          d_up += rd;
+          d_down += rd;
 
         }
 

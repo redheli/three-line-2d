@@ -21,7 +21,7 @@ console.log(normals);
 
 var curvePath = path1();
 var circlePath = normalize(arc(0, 0, 25, 0, Math.PI * 2, false, 64));
-var boxPath = [[0, 0], [2, 2],[10,2],[15,10]];
+var boxPath = [[0, 0], [4, 0]];
 
 var app = createApp({ antialias: true });
 app.renderer.setClearColor('#1d1d1d', 1);
@@ -73,8 +73,8 @@ function setup () {
       totalSize: 1.0
     }));
     var twoDMesh = new THREE.Mesh(twoDGeometry, twoDMat);
-    twoDMesh.position.y = 0.5;
-    twoDMesh.position.z = 0.5;
+    // twoDMesh.position.y = 0.5;
+    // twoDMesh.position.z = 0.5;
     app.scene.add(twoDMesh);
 
   } );

@@ -50,6 +50,7 @@ function createApp (opt) {
 
   // Setup initial size
   resize();
+  createGrid();
 
   return {
     updateProjectionMatrix: updateProjectionMatrix,
@@ -79,5 +80,21 @@ function createApp (opt) {
   function resize () {
     renderer.setSize(window.innerWidth, window.innerHeight);
     updateProjectionMatrix();
+  }
+
+  function createGrid() {
+    var size = 100;
+    var step = 1;
+
+    var gridHelper = new THREE.GridHelper( size, step );
+    gridHelper.position = new THREE.Vector3(0, 0, 0);
+    // http://danni-three.blogspot.sg/2013/09/threejs-helpers.html
+    // grid XY
+    gridHelper.rotation.x = Math.PI/2;
+    scene.add( gridHelper );
+
+    // axis
+    var axisHelper = new THREE.AxisHelper( 10 );
+    scene.add( axisHelper );
   }
 }
