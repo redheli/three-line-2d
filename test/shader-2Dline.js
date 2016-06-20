@@ -27,7 +27,8 @@ module.exports = function (THREE) {
         'uniform float thickness;',
         'attribute float lineMiter;',
         'attribute vec2 lineNormal;',
-        'attribute float rotation;',
+        'attribute float rn;',
+        'attribute float rp;',
 
         'varying vec3 pos;',
         'varying vec2 vUv;',
@@ -43,7 +44,19 @@ module.exports = function (THREE) {
           'vUv = uv;',
           'vlineMiter = lineMiter;',
           'vThickness = thickness;',
-          'vRotation = rotation;',
+          'float rota_angle = 0.0;',
+        'if(abs(lineMiter) != thickness) {',
+        'rota_angle = rn;',
+        '}',
+        'else{',
+        '  rota_angle = rp;',
+        '}',
+
+          'vRotation = rota_angle;//45.0/57.3;',
+
+          '//if(rota_angle != 0.0){',
+              '//vRotation = 45.0/57.3;',
+          '//}',
 
         'vec3 pointPos = position.xyz + vec3(lineNormal * thickness/2.0 * lineMiter, 0.0);',
 
@@ -64,19 +77,24 @@ module.exports = function (THREE) {
 
         'void main() {',
 
-        'float tx = mod(pos.x,1.0);',
-        '//float ty = 0.0;  ',
-          'float m = vlineMiter + vThickness/2.0;',
-          '//if(vlineMiter > 0.0) {',
-        'float ty = abs(m/vThickness);  ',
-          '//} else {',
-        ' //ty = mod(vThickness/2.0 + vlineMiter,vThickness);  ',
-          '//}',
-          '//if(vlineMiter < 0.0){',
-          '//ty = 1.0; ',
-          '//}',
+        'float tx = pos.x;',
+        'float ty = pos.y;',
 
-        'gl_FragColor = texture2D(texture1, vec2(tx,ty) );',
+        'float mid = 0.5;',
+        'vec2 rotated = vec2(cos(vRotation) * (tx - mid) + sin(vRotation) * (ty - mid) + mid,',
+        'cos(vRotation) * (ty - mid) - sin(vRotation) * (tx - mid) + mid);',
+
+        ' tx = mod(rotated.x,1.0);',
+          'float m = vlineMiter + vThickness/2.0;',
+        ' ty = abs(m/vThickness);  ',
+
+
+          'if(tx>1.0 || tx<0.0) discard;',
+        'if(ty>1.0 || ty<0.0) discard;',
+        'vec4 rotatedTexture = texture2D( texture1,  vec2(tx,ty));',
+        'gl_FragColor = rotatedTexture;',
+
+        '//gl_FragColor = texture2D(texture1, vec2(tx,ty) );',
 
         "//vec2 p = vUv;",
         "//if (p.x > 0.4){",

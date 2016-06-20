@@ -22,6 +22,8 @@ module.exports = function createLineMesh (THREE) {
     this.addAttribute('uv', new THREE.BufferAttribute(null, 2));
     this.addAttribute('lineNormal', new THREE.BufferAttribute(null, 2));
     this.addAttribute('lineMiter', new THREE.BufferAttribute(null, 1));
+    this.addAttribute('rn', new THREE.BufferAttribute(null, 1));
+    this.addAttribute('rp', new THREE.BufferAttribute(null, 1));
     if (opt.distances) {
       this.addAttribute('lineDistance', new THREE.BufferAttribute(null, 1));
     }
@@ -48,6 +50,8 @@ module.exports = function createLineMesh (THREE) {
     var attrPosition = this.getAttribute('position');
     var attrNormal = this.getAttribute('lineNormal');
     var attrMiter = this.getAttribute('lineMiter');
+    var attrRotationN = this.getAttribute('rn');
+    var attrRotationP = this.getAttribute('rp');
     var attrDistance = this.getAttribute('lineDistance');
     var attrUV = this.getAttribute('uv');
     var attrIndex = typeof this.getIndex === 'function' ? this.getIndex() : this.getAttribute('index');
@@ -59,6 +63,8 @@ module.exports = function createLineMesh (THREE) {
       attrUV.array = new Float32Array(count * 2);
       attrNormal.array = new Float32Array(count * 2);
       attrMiter.array = new Float32Array(count);
+      attrRotationP.array = new Float32Array(count * 2);
+      attrRotationN.array = new Float32Array(count * 2);
       attrIndex.array = new Uint16Array(Math.max(0, (path.length - 1) * 6));
 
       if (attrDistance) {
@@ -91,6 +97,52 @@ module.exports = function createLineMesh (THREE) {
         indexArray[c++] = i + 2;
         indexArray[c++] = i + 1;
         indexArray[c++] = i + 3;
+      }
+
+      var index2 = index+1;
+      if(pointIndex == 0){
+        attrRotationP.setX(index,0.0);attrRotationP.setX(index2,0.0);
+        attrRotationN.setX(index,0.0);attrRotationN.setX(index2,0.0);
+        // next point
+        if( pointIndex + 1 < list.length ){
+          // calculate angle
+          var np = new THREE.Vector2(path[pointIndex+1][0],path[pointIndex+1][1]);
+          var dx = np.x - point[0];
+          var dy = np.y - point[1];
+          var angle = Math.atan2(dy,dx);
+          attrRotationP.setX(index,angle);attrRotationP.setX(index2,angle);
+          attrRotationN.setX(index,angle);attrRotationN.setX(index2,angle);
+        } // end if list length
+      }// end if pointIndex 0
+      else{
+
+        // previous point
+        var pp = new THREE.Vector2(path[pointIndex-1][0],path[pointIndex-1][1]);
+
+
+
+        // calculate angle from previous point
+        dx = point[0] - pp.x;
+        dy = point[1] - pp.y;
+        var angle_p = Math.atan2(dy,dx);
+
+        if( pointIndex + 1 < list.length ){
+          // next point
+          var np = new THREE.Vector2(path[pointIndex+1][0],path[pointIndex+1][1]);
+          // calculate angle to next point
+          var dx = np.x - point[0];
+          var dy = np.y - point[1];
+          var angle_n = Math.atan2(dy,dx);
+          attrRotationP.setX(index,angle_p);attrRotationP.setX(index2,angle_p);
+          attrRotationN.setX(index,angle_n);attrRotationN.setX(index2,angle_n);
+
+        }
+        else{
+          attrRotationP.setX(index,angle_p);attrRotationP.setX(index2,angle_p);
+          attrRotationN.setX(index,angle_p);attrRotationN.setX(index2,angle_p);
+        }
+
+
       }
 
       attrPosition.setXYZ(index++, point[0], point[1], 0);
