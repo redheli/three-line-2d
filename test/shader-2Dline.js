@@ -31,6 +31,7 @@ module.exports = function (THREE) {
         'varying vec3 pos;',
         'varying vec2 vUv;',
         'varying float vlineMiter;',
+        'varying float vThickness;',
 
 
 
@@ -39,6 +40,7 @@ module.exports = function (THREE) {
 
           'vUv = uv;',
           'vlineMiter = lineMiter;',
+          'vThickness = thickness;',
 
         'vec3 pointPos = position.xyz + vec3(lineNormal * thickness/2.0 * lineMiter, 0.0);',
 
@@ -53,12 +55,13 @@ module.exports = function (THREE) {
           'varying vec3 pos;',
         'varying vec2 vUv;',
         'varying float vlineMiter;',
+        'varying float vThickness;',
 
 
         'void main() {',
 
         'float tx = mod(pos.x,1.0);',
-        'float ty = mod(pos.y,1.0); ',
+        'float ty = mod(pos.y,vThickness) * 0.5;  ',
           '//if(vlineMiter < 0.0){',
           '//ty = 1.0; ',
           '//}',
