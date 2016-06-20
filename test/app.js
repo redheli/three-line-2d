@@ -5,12 +5,15 @@
   controls.
  */
 
-const createControls = require('orbit-controls');
+// const createControls = require('orbit-controls');
 const assign = require('object-assign');
-
+const THREE_OrbitControls = require('three/examples/js/controls/OrbitControls');
 module.exports = createApp;
 function createApp (opt) {
   opt = opt || {};
+
+  var WIDTH = window.innerWidth,
+      HEIGHT = window.innerHeight;
 
   // Scale for retina
   const dpr = window.devicePixelRatio;
@@ -30,20 +33,27 @@ function createApp (opt) {
   document.body.appendChild(canvas);
 
   // 3D camera looking
-  const camera = new THREE.PerspectiveCamera(60, 1, 0.01, 1000);
+  const camera = new THREE.PerspectiveCamera( 60, WIDTH / HEIGHT, 1, 2000 );
+  camera.up.set( 0, 0, 1 );
+  camera.position.z = 10;
+  camera.position.x = 0;
+  camera.position.y = 0;
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+
   const target = new THREE.Vector3();
 
   // 3D scene
   const scene = new THREE.Scene();
 
   // 3D orbit controller with damping
-  const controls = createControls(assign({
-    canvas: canvas,
-    theta: 5 * Math.PI / 180,
-    phi: -90 * Math.PI / 180,
-    distance: 3,
-    distanceBounds: [ 2, 40 ]
-  }, opt));
+  // const controls = createControls(assign({
+  //   canvas: canvas,
+  //   theta: 5 * Math.PI / 180,
+  //   phi: -90 * Math.PI / 180,
+  //   distance: 3,
+  //   distanceBounds: [ 2, 40 ]
+  // }, opt));
+  const controls = new THREE.OrbitControls( camera, renderer.domElement );
 
   // Update frame size
   window.addEventListener('resize', resize);
@@ -68,13 +78,13 @@ function createApp (opt) {
 
     // update camera controls
     controls.update();
-    camera.position.fromArray(controls.position);
-    camera.up.fromArray(controls.up);
-    camera.lookAt(target.fromArray(controls.direction));
-
-    // Update camera matrices
-    camera.aspect = aspect;
-    camera.updateProjectionMatrix();
+    // camera.position.fromArray(controls.position);
+    // camera.up.fromArray(controls.up);
+    // camera.lookAt(target.fromArray(controls.direction));
+    //
+    // // Update camera matrices
+    // camera.aspect = aspect;
+    // camera.updateProjectionMatrix();
   }
 
   function resize () {

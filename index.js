@@ -19,6 +19,7 @@ module.exports = function createLineMesh (THREE) {
     opt = opt || {};
 
     this.addAttribute('position', new THREE.BufferAttribute(null, 3));
+    this.addAttribute('uv', new THREE.BufferAttribute(null, 2));
     this.addAttribute('lineNormal', new THREE.BufferAttribute(null, 2));
     this.addAttribute('lineMiter', new THREE.BufferAttribute(null, 1));
     if (opt.distances) {
@@ -48,12 +49,14 @@ module.exports = function createLineMesh (THREE) {
     var attrNormal = this.getAttribute('lineNormal');
     var attrMiter = this.getAttribute('lineMiter');
     var attrDistance = this.getAttribute('lineDistance');
+    var attrUV = this.getAttribute('uv');
     var attrIndex = typeof this.getIndex === 'function' ? this.getIndex() : this.getAttribute('index');
 
     if (!attrPosition.array ||
         (path.length !== attrPosition.array.length / 3 / VERTS_PER_POINT)) {
       var count = path.length * VERTS_PER_POINT;
       attrPosition.array = new Float32Array(count * 3);
+      attrUV.array = new Float32Array(count * 2);
       attrNormal.array = new Float32Array(count * 2);
       attrMiter.array = new Float32Array(count);
       attrIndex.array = new Uint16Array(Math.max(0, (path.length - 1) * 6));
@@ -81,15 +84,20 @@ module.exports = function createLineMesh (THREE) {
     var mmm = [ [1,2],[2,3] ];
     path.forEach(function (normals,point, pointIndex,list) {
       var i = index;
-      indexArray[c++] = i + 0;
-      indexArray[c++] = i + 1;
-      indexArray[c++] = i + 2;
-      indexArray[c++] = i + 2;
-      indexArray[c++] = i + 1;
-      indexArray[c++] = i + 3;
+      if(pointIndex<list.length) {
+        indexArray[c++] = i + 0;
+        indexArray[c++] = i + 1;
+        indexArray[c++] = i + 2;
+        indexArray[c++] = i + 2;
+        indexArray[c++] = i + 1;
+        indexArray[c++] = i + 3;
+      }
 
       attrPosition.setXYZ(index++, point[0], point[1], 0);
+      attrUV.setXY(index,0.5,0.5);
       attrPosition.setXYZ(index++, point[0], point[1], 0);
+      attrUV.setXY(index,0.0,0.0);
+
 
       if (attrDistance) {
         // var d = pointIndex / (list.length - 1);
@@ -122,8 +130,8 @@ module.exports = function createLineMesh (THREE) {
 
         // d = 0.6;
 
-        attrDistance.setX(dIndex++, d_up);
-        attrDistance.setX(dIndex++, d_down);
+        attrDistance.setX(dIndex++, d);
+        attrDistance.setX(dIndex++, d);
       }
     }.bind(null,normals) );
 

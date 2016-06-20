@@ -15,7 +15,7 @@ module.exports = function (THREE) {
         dashDistance: { type: 'f', value: 0.2 },
         dashSmooth: { type: 'f', value: 0.01 },
 
-        texture1: {type: 't', value: opt.texture },
+        texture1: {type: 't', value: opt.texture1 },
 
         dashSize: { type: 'f', value: number(opt.dashSize, 1.0) },
         totalSize: { type: 'f', value: number(opt.totalSize, 3.0) }
@@ -23,77 +23,51 @@ module.exports = function (THREE) {
       vertexShader: [
         'uniform float scale;',
         'attribute float lineDistance;',
-        'varying float vLineDistance;',
 
         'uniform float thickness;',
         'attribute float lineMiter;',
         'attribute vec2 lineNormal;',
-        '//attribute float lineDistance;',
-        'varying float lineU;',
-        'varying float vRotation;',
-        'varying vec3 pos;',
 
-        '#include <common>',
-        '#include <color_pars_vertex>',
-        '#include <logdepthbuf_pars_vertex>',
+        'varying vec3 pos;',
+        'varying vec2 vUv;',
+
 
 
         'void main() {',
-          '#include <color_vertex>',
-          'vLineDistance =  lineDistance;',
+
           'pos = position;',
-          'vRotation = 0.5;',
-        'lineU = lineDistance;',
+          'vUv = uv;',
+
         'vec3 pointPos = position.xyz + vec3(lineNormal * thickness/2.0 * lineMiter, 0.0);',
         'gl_Position = projectionMatrix * modelViewMatrix * vec4( pointPos, 1.0 );',
-          '#include <logdepthbuf_vertex>',
 
         '}'
       ].join('\n'),
       fragmentShader: [
           'uniform sampler2D texture1;',
-          'uniform float opacity;',
-           'uniform float dashSize;',
-          'uniform float totalSize;',
-
-          'varying float vLineDistance;',
-          '#include <common>',
-          '#include <color_pars_vertex>',
-          '#include <logdepthbuf_pars_vertex>',
-
-        'varying float lineU;',
-
-        '//uniform float opacity;',
-        'uniform vec3 diffuse;',
-        'uniform vec3 diffuse2;',
-        'uniform float dashSteps;',
-        'uniform float dashSmooth;',
-        'uniform float dashDistance;',
           'varying vec3 pos;',
-          'varying float vRotation;',
+        'varying vec2 vUv;',
 
 
         'void main() {',
 
-        'float tx = mod(pos.x,1.0);',
-        'float ty = mod(pos.y,1.0)*0.2;',
-        'float mid = 0.5;',
-        'vec2 rotated = vec2(cos(vRotation) * (tx - mid) + sin(vRotation) * (ty - mid) + mid,',
-        'cos(vRotation) * (ty - mid) - sin(vRotation) * (tx - mid) + mid);',
-        'vec4 rotatedTexture = texture2D( texture1,  rotated);',
-        'gl_FragColor = rotatedTexture;',
+        '//float tx = mod(pos.x,1.0);',
+        '//float ty = mod(pos.y,1.0);',
+        '//gl_FragColor = texture2D(texture1, vec2(tx,ty*2.0) );',
 
-        '#include <logdepthbuf_fragment>',
-        '#include <color_fragment>',
+        "vec2 p = vUv;",
+        "if (p.x > 0.4){",
+        'gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
+          '} else {',
+        'gl_FragColor = vec4(0.9, 0.2, 0.0, 1.0);',
+          '}',
 
-        '#include <premultiplied_alpha_fragment>',
-        '#include <tonemapping_fragment>',
-        '#include <encodings_fragment>',
-        '#include <fog_fragment>',
 
-        '//float lineUMod = mod(lineU, 1.0/dashSteps) * dashSteps;',
-        '//float dash = smoothstep(dashDistance, dashDistance+dashSmooth, length(lineUMod-0.5));',
-        '//gl_FragColor = vec4(vec3(dash), opacity * dash);',
+        '//gl_FragColor = texture2D(texture1, vUv );',
+
+
+        '//gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
+
         '}'
       ].join('\n')
     }, opt);
@@ -102,6 +76,9 @@ module.exports = function (THREE) {
     delete ret.thickness;
     delete ret.opacity;
     delete ret.diffuse;
+    delete ret.texture1;
+    delete ret.dashSize;
+    delete ret.totalSize;
 
     var threeVers = (parseInt(THREE.REVISION, 10) || 0) | 0;
     if (threeVers < 72) {
