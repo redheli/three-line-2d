@@ -14,7 +14,8 @@ var curve = require('adaptive-bezier-curve');
 
 // test normal
 var getNormals = require('polyline-normals');
-var my_path = [ [0, 5], [0, 10], [10, 20] ];
+var my_path = [[0, 1], [4, 1]];
+var my_path2 = [[0, 4], [4, 4],[8,8]];
 var normals = getNormals(my_path, false);
 console.log(normals);
 
@@ -61,7 +62,7 @@ function setup () {
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
 
-    var twoDGeometry = Line(boxPath, {distances: true, closed: false, diffuse: 0x5cd7ff});
+    var twoDGeometry = Line(my_path, {distances: true, closed: false, diffuse: 0x5cd7ff});
     twoDGeometry.lineDistancesNeedUpdate = true;
     var twoDMat = new THREE.ShaderMaterial(TwoDLineShader({
       thickness: 2,
@@ -77,6 +78,24 @@ function setup () {
     // twoDMesh.position.y = 0.5;
     // twoDMesh.position.z = 0.5;
     app.scene.add(twoDMesh);
+
+    //
+    var twoDGeometry2 = Line(my_path2, {distances: true, closed: false, diffuse: 0x5cd7ff});
+    twoDGeometry2.lineDistancesNeedUpdate = true;
+    var twoDMat2 = new THREE.ShaderMaterial(TwoDLineShader({
+      thickness: 2,
+      side: THREE.DoubleSide,
+      diffuse: 0x00ff00,
+
+      texture1: texture,
+
+      dashSize: 0.5,
+      totalSize: 1.0
+    }));
+    var twoDMesh2 = new THREE.Mesh(twoDGeometry2, twoDMat2);
+    // twoDMesh.position.y = 0.5;
+    // twoDMesh.position.z = 0.5;
+    app.scene.add(twoDMesh2);
 
   } );
 
