@@ -30,15 +30,20 @@ module.exports = function (THREE) {
 
         'varying vec3 pos;',
         'varying vec2 vUv;',
+        'varying float vlineMiter;',
 
 
 
         'void main() {',
 
-          'pos = position;',
+
           'vUv = uv;',
+          'vlineMiter = lineMiter;',
 
         'vec3 pointPos = position.xyz + vec3(lineNormal * thickness/2.0 * lineMiter, 0.0);',
+
+        'pos = pointPos;',
+
         'gl_Position = projectionMatrix * modelViewMatrix * vec4( pointPos, 1.0 );',
 
         '}'
@@ -47,20 +52,25 @@ module.exports = function (THREE) {
           'uniform sampler2D texture1;',
           'varying vec3 pos;',
         'varying vec2 vUv;',
+        'varying float vlineMiter;',
 
 
         'void main() {',
 
-        '//float tx = mod(pos.x,1.0);',
-        '//float ty = mod(pos.y,1.0);',
-        '//gl_FragColor = texture2D(texture1, vec2(tx,ty*2.0) );',
+        'float tx = mod(pos.x,1.0);',
+        'float ty = mod(pos.y,1.0); ',
+          '//if(vlineMiter < 0.0){',
+          '//ty = 1.0; ',
+          '//}',
 
-        "vec2 p = vUv;",
-        "if (p.x > 0.4){",
-        'gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
-          '} else {',
-        'gl_FragColor = vec4(0.9, 0.2, 0.0, 1.0);',
-          '}',
+        'gl_FragColor = texture2D(texture1, vec2(tx,ty) );',
+
+        "//vec2 p = vUv;",
+        "//if (p.x > 0.4){",
+        '//gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
+          '//} else {',
+        '//gl_FragColor = vec4(0.9, 0.2, 0.0, 1.0);',
+          '//}',
 
 
         '//gl_FragColor = texture2D(texture1, vUv );',
