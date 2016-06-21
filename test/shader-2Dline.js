@@ -92,6 +92,9 @@ module.exports = function (THREE) {
 
         'void main() {',
 
+        'gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
+          'return;',
+
         'float tx = pos.x;',
         'float ty = pos.y;',
 
@@ -122,7 +125,7 @@ module.exports = function (THREE) {
         '//gl_FragColor = texture2D(texture1, vUv );',
 
 
-        'gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
+
 
         '}'
       ].join('\n')

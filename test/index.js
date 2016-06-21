@@ -32,14 +32,14 @@ setup();
 
 function setup () {
   // // Our bezier curve
-  // var curveGeometry = Line(curvePath);
-  // var mat = new THREE.ShaderMaterial(BasicShader({
-  //   side: THREE.DoubleSide,
-  //   diffuse: 0x5cd7ff,
-  //   thickness: 0.1
-  // }));
-  // var mesh = new THREE.Mesh(curveGeometry, mat);
-  // app.scene.add(mesh);
+  var curveGeometry = Line(my_path2);
+  var mat = new THREE.ShaderMaterial(BasicShader({
+    side: THREE.DoubleSide,
+    diffuse: 0x5cd7ff,
+    thickness: 2
+  }));
+  var mesh = new THREE.Mesh(curveGeometry, mat);
+  app.scene.add(mesh);
 
   // // Our dashed circle
   // circlePath.pop();
