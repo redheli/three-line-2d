@@ -42,7 +42,7 @@ module.exports = function (THREE) {
 
 
           'vUv = uv;',
-          'vlineMiter = lineMiter;',
+          'vlineMiter = rn;',
           'vThickness = thickness;',
           'float rota_angle = 0.0;',
         'if(abs(lineMiter) != thickness) {',

@@ -102,11 +102,11 @@ module.exports = function createLineMesh (THREE) {
       var index2 = index+1;
         var index3 = index+2;
         var index4 = index+3;
-        attrRotationN.setX(index,1.0);attrRotationN.setX(index2,1.0);
+        attrRotationN.setX(index,-1.0);attrRotationN.setX(index2,-1.0);
         attrRotationN.setX(index3,1.0);attrRotationN.setX(index4,1.0);
       if(pointIndex == 0){
         attrRotationP.setX(index,0.0);attrRotationP.setX(index2,0.0);
-        attrRotationN.setX(index,0.0);attrRotationN.setX(index2,0.0);
+        //attrRotationN.setX(index,0.0);attrRotationN.setX(index2,0.0);
         // next point
         if( pointIndex + 1 < list.length ){
           // calculate angle
