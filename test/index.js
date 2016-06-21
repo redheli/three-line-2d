@@ -39,7 +39,7 @@ function setup () {
     thickness: 2
   }));
   var mesh = new THREE.Mesh(curveGeometry, mat);
-  app.scene.add(mesh);
+  // app.scene.add(mesh);
 
   // // Our dashed circle
   // circlePath.pop();
