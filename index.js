@@ -100,6 +100,10 @@ module.exports = function createLineMesh (THREE) {
       }
 
       var index2 = index+1;
+        var index3 = index+2;
+        var index4 = index+3;
+        attrRotationN.setX(index,1.0);attrRotationN.setX(index2,1.0);
+        attrRotationN.setX(index3,1.0);attrRotationN.setX(index4,1.0);
       if(pointIndex == 0){
         attrRotationP.setX(index,0.0);attrRotationP.setX(index2,0.0);
         attrRotationN.setX(index,0.0);attrRotationN.setX(index2,0.0);
@@ -111,7 +115,9 @@ module.exports = function createLineMesh (THREE) {
           var dy = np.y - point[1];
           var angle = Math.atan2(dy,dx);
           attrRotationP.setX(index,angle);attrRotationP.setX(index2,angle);
-          attrRotationN.setX(index,angle);attrRotationN.setX(index2,angle);
+            attrRotationP.setX(index3,angle);attrRotationP.setX(index4,angle);
+
+          // attrRotationN.setX(index,angle);attrRotationN.setX(index2,angle);
         } // end if list length
       }// end if pointIndex 0
       else{
@@ -127,19 +133,23 @@ module.exports = function createLineMesh (THREE) {
         var angle_p = Math.atan2(dy,dx);
 
         if( pointIndex + 1 < list.length ){
+            // still has next point
           // next point
           var np = new THREE.Vector2(path[pointIndex+1][0],path[pointIndex+1][1]);
           // calculate angle to next point
           var dx = np.x - point[0];
           var dy = np.y - point[1];
           var angle_n = Math.atan2(dy,dx);
-          attrRotationP.setX(index,angle_p);attrRotationP.setX(index2,angle_p);
-          attrRotationN.setX(index,angle_n);attrRotationN.setX(index2,angle_n);
+          attrRotationP.setX(index,angle_p);attrRotationP.setX(index3,angle_p);
+            attrRotationP.setX(index2,angle_n);attrRotationP.setX(index4,angle_n);
+          // attrRotationN.setX(index,angle_n);attrRotationN.setX(index2,angle_n);
 
         }
         else{
-          attrRotationP.setX(index,angle_p);attrRotationP.setX(index2,angle_p);
-          attrRotationN.setX(index,angle_p);attrRotationN.setX(index2,angle_p);
+            // last point
+          attrRotationP.setX(index,angle_p);attrRotationP.setX(index3,angle_p);
+            attrRotationP.setX(index2,angle_p);attrRotationP.setX(index4,angle_p);
+          // attrRotationN.setX(index,angle_p);attrRotationN.setX(index2,angle_p);
         }
 
 

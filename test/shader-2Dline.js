@@ -67,7 +67,7 @@ module.exports = function (THREE) {
         'else if(a<-3.14/2.0){',
         'ra = 3.14*1.5+a;',
         '}',
-          'vRotation = 45.0/57.3;',
+          'vRotation = rp;//45.0/57.3;',
 
           '//if(rota_angle != 0.0){',
               '//vRotation = 45.0/57.3;',
@@ -92,8 +92,8 @@ module.exports = function (THREE) {
 
         'void main() {',
 
-        'gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
-          'return;',
+        '//gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
+          '//return;',
 
         'float tx = pos.x;',
         'float ty = pos.y;',
@@ -107,10 +107,10 @@ module.exports = function (THREE) {
         ' ty = abs(m/vThickness);  ',
 
 
-          'if(tx>1.0 || tx<0.0) discard;',
-        'if(ty>1.0 || ty<0.0) discard;',
+          '//if(tx>1.0 || tx<0.0) discard;',
+        '//if(ty>1.0 || ty<0.0) discard;',
         'vec4 rotatedTexture = texture2D( texture1,  vec2(tx,ty));',
-        '//gl_FragColor = rotatedTexture;',
+        'gl_FragColor = rotatedTexture;',
 
         '//gl_FragColor = texture2D(texture1, vec2(tx,ty) );',
 
