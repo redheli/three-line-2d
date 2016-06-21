@@ -1,6 +1,6 @@
 var inherits = require('inherits');
 var getNormals = require('polyline-normals');
-var VERTS_PER_POINT = 2;
+var VERTS_PER_POINT = 4;
 
 module.exports = function createLineMesh (THREE) {
   function LineMesh (path, opt) {
@@ -91,12 +91,12 @@ module.exports = function createLineMesh (THREE) {
     path.forEach(function (normals,point, pointIndex,list) {
       var i = index;
       if(pointIndex<list.length) {
-        indexArray[c++] = i + 0;
-        indexArray[c++] = i + 1;
-        indexArray[c++] = i + 2;
-        indexArray[c++] = i + 2;
         indexArray[c++] = i + 1;
         indexArray[c++] = i + 3;
+        indexArray[c++] = i + 4;
+        indexArray[c++] = i + 3;
+        indexArray[c++] = i + 4;
+        indexArray[c++] = i + 6;
       }
 
       var index2 = index+1;
@@ -146,7 +146,9 @@ module.exports = function createLineMesh (THREE) {
       }
 
       attrPosition.setXYZ(index++, point[0], point[1], 0);
+      attrPosition.setXYZ(index++, point[0], point[1], 0);
       attrUV.setXY(index,0.5,0.5);
+      attrPosition.setXYZ(index++, point[0], point[1], 0);
       attrPosition.setXYZ(index++, point[0], point[1], 0);
       attrUV.setXY(index,0.0,0.0);
 
@@ -184,6 +186,8 @@ module.exports = function createLineMesh (THREE) {
 
         attrDistance.setX(dIndex++, d);
         attrDistance.setX(dIndex++, d);
+        attrDistance.setX(dIndex++, d);
+        attrDistance.setX(dIndex++, d);
       }
     }.bind(null,normals) );
 
@@ -194,8 +198,12 @@ module.exports = function createLineMesh (THREE) {
       var miter = n[1];
       attrNormal.setXY(nIndex++, norm[0], norm[1]);
       attrNormal.setXY(nIndex++, norm[0], norm[1]);
+      attrNormal.setXY(nIndex++, norm[0], norm[1]);
+      attrNormal.setXY(nIndex++, norm[0], norm[1]);
 
       attrMiter.setX(mIndex++, -miter);
+      attrMiter.setX(mIndex++, -miter);
+      attrMiter.setX(mIndex++, miter);
       attrMiter.setX(mIndex++, miter);
     });
   };

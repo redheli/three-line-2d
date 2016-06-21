@@ -107,7 +107,7 @@ module.exports = function (THREE) {
           'if(tx>1.0 || tx<0.0) discard;',
         'if(ty>1.0 || ty<0.0) discard;',
         'vec4 rotatedTexture = texture2D( texture1,  vec2(tx,ty));',
-        'gl_FragColor = rotatedTexture;',
+        '//gl_FragColor = rotatedTexture;',
 
         '//gl_FragColor = texture2D(texture1, vec2(tx,ty) );',
 
@@ -122,7 +122,7 @@ module.exports = function (THREE) {
         '//gl_FragColor = texture2D(texture1, vUv );',
 
 
-        '//gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
+        'gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
 
         '}'
       ].join('\n')
