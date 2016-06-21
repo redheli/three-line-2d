@@ -35,6 +35,7 @@ module.exports = function (THREE) {
         'varying float vlineMiter;',
         'varying float vThickness;',
         'varying float vRotation;',
+        'varying float vDistance;',
 
 
 
@@ -44,6 +45,7 @@ module.exports = function (THREE) {
           'vUv = uv;',
           'vlineMiter = rn;',
           'vThickness = thickness;',
+          'vDistance = lineDistance;',
           'float rota_angle = 0.0;',
         'if(abs(lineMiter) != thickness) {',
         'rota_angle = rn;',
@@ -88,6 +90,7 @@ module.exports = function (THREE) {
         'varying float vlineMiter;',
         'varying float vThickness;',
         'varying float vRotation;',
+        'varying float vDistance;',
 
 
         'void main() {',
@@ -102,14 +105,19 @@ module.exports = function (THREE) {
         'vec2 rotated = vec2(cos(vRotation) * (tx - mid) + sin(vRotation) * (ty - mid) + mid,',
         'cos(vRotation) * (ty - mid) - sin(vRotation) * (tx - mid) + mid);',
 
-        ' tx = mod(rotated.x,1.0);',
+          '//if( mod(rotated.x,5.0)> 0.99 ){',
+              '//discard;',
+              '//return;',
+          '//}',
+
+        ' tx = mod(vDistance,1.0);',
           'float m = vlineMiter + vThickness/2.0;',
         ' ty = abs(m/vThickness);  ',
 
 
           '//if(tx>1.0 || tx<0.0) discard;',
         '//if(ty>1.0 || ty<0.0) discard;',
-        'vec4 rotatedTexture = texture2D( texture1,  vec2(tx,ty));',
+        'vec4 rotatedTexture = texture2D( texture1,  vec2(vDistance,ty));',
         'gl_FragColor = rotatedTexture;',
 
         '//gl_FragColor = texture2D(texture1, vec2(tx,ty) );',

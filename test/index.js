@@ -32,13 +32,13 @@ setup();
 
 function setup () {
   // // Our bezier curve
-  var curveGeometry = Line(my_path2);
-  var mat = new THREE.ShaderMaterial(BasicShader({
-    side: THREE.DoubleSide,
-    diffuse: 0x5cd7ff,
-    thickness: 2
-  }));
-  var mesh = new THREE.Mesh(curveGeometry, mat);
+  // var curveGeometry = Line(my_path2);
+  // var mat = new THREE.ShaderMaterial(BasicShader({
+  //   side: THREE.DoubleSide,
+  //   diffuse: 0x5cd7ff,
+  //   thickness: 2
+  // }));
+  // var mesh = new THREE.Mesh(curveGeometry, mat);
   // app.scene.add(mesh);
 
   // // Our dashed circle
@@ -57,12 +57,12 @@ function setup () {
   // circlePath.pop();
   var loader = new THREE.TextureLoader();
 
-  loader.load('images/direction.png', function ( texture ) {
+  loader.load('images/dash_yellow.png', function ( texture ) {
 
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
 
-    var twoDGeometry = Line(my_path, {distances: true, closed: false, diffuse: 0x5cd7ff});
+    /*var twoDGeometry = Line(my_path, {distances: true, closed: false, diffuse: 0x5cd7ff});
     twoDGeometry.lineDistancesNeedUpdate = true;
     var twoDMat = new THREE.ShaderMaterial(TwoDLineShader({
       thickness: 2,
@@ -74,10 +74,10 @@ function setup () {
       dashSize: 0.5,
       totalSize: 1.0
     }));
-    var twoDMesh = new THREE.Mesh(twoDGeometry, twoDMat);
+    var twoDMesh = new THREE.Mesh(twoDGeometry, twoDMat);*/
     // twoDMesh.position.y = 0.5;
     // twoDMesh.position.z = 0.5;
-    app.scene.add(twoDMesh);
+    // app.scene.add(twoDMesh);
 
     //
     var twoDGeometry2 = Line(my_path2, {distances: true, closed: false, diffuse: 0x5cd7ff});

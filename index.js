@@ -84,8 +84,11 @@ module.exports = function createLineMesh (THREE) {
     var dIndex = 0;
     var indexArray = attrIndex.array;
     var d = 0;
-    var d_up = 0.0 ;
-    var d_down = 0.0;
+    var last_dd=0;
+    var d_up2 = 0.0 ;
+    var d_down0 = 0.0;
+      var d_up3 = 0.0 ;
+      var d_down1 = 0.0;
     var nnn = normals;
     var mmm = [ [1,2],[2,3] ];
     path.forEach(function (normals,point, pointIndex,list) {
@@ -179,14 +182,42 @@ module.exports = function createLineMesh (THREE) {
           var x = normals[pointIndex][0][0];
           var y = normals[pointIndex][0][1];
           var gg = Math.sqrt(x*x+y*y);
-          gg = gg* width/2.0 * miter;
+          gg = gg* width * miter;
 
           // x = x+ x * width/2.0 * miter;
           // y = y+ y * width/2.0 * miter;
-          var m_w = gg*gg-(width/2.0)*(width/2.0);
+          var m_w = gg*gg-(width)*(width);
           var dd = Math.sqrt(m_w);
-          d_up += rd;
-          d_down += rd;
+            // d += rd;
+
+          if(x<0 && y>=0){
+
+            d_up2 += rd + last_dd - dd;
+            d_down0 = d_up2 + 2*dd;
+
+            d_up3 = d_up2;//d + dd;
+            d_down1 = d_up3 + 2*dd;
+
+          }
+          else if(x>=0 && y>0){
+            d_up2 += rd - last_dd + dd;
+            d_down0 = d_up2 - 2* dd;
+
+
+            d_up3 = d_up2;
+            d_down1 = d_up3 + 2*dd;
+
+          }
+          else {
+            d_down0 = d - dd;
+            d_up2 = d + dd;
+
+            d_down1 = d + dd;
+            d_up3 = d - dd;
+          }
+
+
+          last_dd = dd;
 
         }
 
@@ -194,10 +225,10 @@ module.exports = function createLineMesh (THREE) {
 
         // d = 0.6;
 
-        attrDistance.setX(dIndex++, d);
-        attrDistance.setX(dIndex++, d);
-        attrDistance.setX(dIndex++, d);
-        attrDistance.setX(dIndex++, d);
+        attrDistance.setX(dIndex++, d_down0);
+        attrDistance.setX(dIndex++, d_down1);
+        attrDistance.setX(dIndex++, d_up2);
+        attrDistance.setX(dIndex++, d_up3);
       }
     }.bind(null,normals) );
 
