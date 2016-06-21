@@ -111,14 +111,19 @@ module.exports = function (THREE) {
           '//}',
 
         ' tx = mod(vDistance,1.0);',
+          'if(tx > 3.99){',
+            '//discard;',
+          '}',
+
           'float m = vlineMiter + vThickness/2.0;',
         ' ty = abs(m/vThickness);  ',
 
 
           '//if(tx>1.0 || tx<0.0) discard;',
         '//if(ty>1.0 || ty<0.0) discard;',
-        'vec4 rotatedTexture = texture2D( texture1,  vec2(vDistance,ty));',
-        'gl_FragColor = rotatedTexture;',
+        'vec4 rotatedTexture = texture2D( texture1,  vec2(tx,ty));',
+        '//gl_FragColor = rotatedTexture;',
+        'gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
 
         '//gl_FragColor = texture2D(texture1, vec2(tx,ty) );',
 

@@ -1,6 +1,6 @@
 var inherits = require('inherits');
 var getNormals = require('polyline-normals');
-var VERTS_PER_POINT = 6;
+var VERTS_PER_POINT = 4;
 
 module.exports = function createLineMesh (THREE) {
   function LineMesh (path, opt) {
@@ -46,6 +46,59 @@ module.exports = function createLineMesh (THREE) {
       path.push(path[0]);
       normals.push(normals[0]);
     }
+
+    var new_path = [];
+    // generate two verties for each waypoint in path
+    path.forEach(function (normals,point, pointIndex,list) {
+      var rd;
+      if (pointIndex == 0 || pointIndex == path.length-1){
+        new_path.push(path[pointIndex]);
+      }
+      else if ( pointIndex > 0 && pointIndex < path.length ) {
+        var current_point = new THREE.Vector2(path[pointIndex][0],path[pointIndex][1]);
+        var pre_point = new THREE.Vector2(path[pointIndex-1][0],path[pointIndex-1][1]);
+        var next_point = new THREE.Vector2(path[pointIndex+1][0],path[pointIndex+1][1]);
+
+        // point 1
+        var rd = current_point.distanceTo( pre_point );
+        var width = 1.0;
+        var miter = normals[pointIndex][1];
+        var x = normals[pointIndex][0][0];
+        var y = normals[pointIndex][0][1];
+        var gg = Math.sqrt(x*x+y*y);
+        gg = gg* width * miter;
+        var m_w = gg*gg-(width)*(width);
+        var dd = Math.sqrt(m_w);
+
+        var x1 = current_point.x - dd/rd * (current_point.x - pre_point.x);
+        var y1 = current_point.y - dd/rd * (current_point.y - pre_point.y);
+
+        new_path.push([x1,y1]);
+
+        new_path.push([current_point.x,current_point.y]);
+
+        // point 2
+        var rd2 = next_point.distanceTo( current_point );
+
+        var x2 = current_point.x - dd/rd2 * (current_point.x - next_point.x);
+        var y2 = current_point.y - dd/rd2 * (current_point.y - next_point.y);
+
+        new_path.push([x2,y2]);
+
+      }// end if pointIndex
+
+    }.bind(null,normals));// end path.forEach
+
+    path = new_path;
+
+    var normals = getNormals(path, closed);
+
+    if (closed) {
+      path = path.slice();
+      path.push(path[0]);
+      normals.push(normals[0]);
+    }
+
 
     var attrPosition = this.getAttribute('position');
     var attrNormal = this.getAttribute('lineNormal');

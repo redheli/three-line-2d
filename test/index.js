@@ -15,7 +15,8 @@ var curve = require('adaptive-bezier-curve');
 // test normal
 var getNormals = require('polyline-normals');
 var my_path = [[0, 1], [4, 1]];
-var my_path2 = [[0, 4], [3.5,4], [4, 4],[4.4,4.4],[8,8]];
+// var my_path2 = [[0, 4], [3.5,4], [4, 4],[4.4,4.4],[8,8]];
+var my_path2 = [[0, 4],[1,4], [4, 4] ,[8,8],[12,10],[14,15]];
 var normals = getNormals(my_path, false);
 console.log(normals);
 
@@ -57,7 +58,7 @@ function setup () {
   // circlePath.pop();
   var loader = new THREE.TextureLoader();
 
-  loader.load('images/dash_yellow.png', function ( texture ) {
+  loader.load('images/direction.png', function ( texture ) {
 
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
