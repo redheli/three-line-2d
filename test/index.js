@@ -16,7 +16,8 @@ var curve = require('adaptive-bezier-curve');
 var getNormals = require('polyline-normals');
 var my_path = [[0, 1], [4, 1]];
 // var my_path2 = [[0, 4], [3.5,4], [4, 4],[4.4,4.4],[8,8]];
-var my_path2 = [[0, 4],[1,4], [4, 4] ,[8,8],[12,10],[14,15]];
+var my_path2 = [[0, 4],[1,4.1], [4, 3.5] ,[8,4.3],[12,10],[14,15]];
+//var my_path2 = [[0, 4],[1,4], [4, 4]];
 var normals = getNormals(my_path, false);
 console.log(normals);
 
@@ -33,14 +34,14 @@ setup();
 
 function setup () {
   // // Our bezier curve
-  // var curveGeometry = Line(my_path2);
-  // var mat = new THREE.ShaderMaterial(BasicShader({
-  //   side: THREE.DoubleSide,
-  //   diffuse: 0x5cd7ff,
-  //   thickness: 2
-  // }));
-  // var mesh = new THREE.Mesh(curveGeometry, mat);
-  // app.scene.add(mesh);
+  var curveGeometry = Line(my_path2);
+  var mat = new THREE.ShaderMaterial(BasicShader({
+    side: THREE.DoubleSide,
+    diffuse: 0x00ff00,
+    thickness: 2
+  }));
+  var mesh = new THREE.Mesh(curveGeometry, mat);
+  app.scene.add(mesh);
 
   // // Our dashed circle
   // circlePath.pop();

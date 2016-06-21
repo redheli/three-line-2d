@@ -110,9 +110,9 @@ module.exports = function (THREE) {
               '//return;',
           '//}',
 
-        ' tx = mod(vDistance,1.0);',
-          'if(tx > 3.99){',
-            '//discard;',
+        ' tx = mod(vDistance,5.0);',
+          'if(tx > 0.99 || tx<0.01){',
+            'discard;',
           '}',
 
           'float m = vlineMiter + vThickness/2.0;',
@@ -122,8 +122,8 @@ module.exports = function (THREE) {
           '//if(tx>1.0 || tx<0.0) discard;',
         '//if(ty>1.0 || ty<0.0) discard;',
         'vec4 rotatedTexture = texture2D( texture1,  vec2(tx,ty));',
-        '//gl_FragColor = rotatedTexture;',
-        'gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
+        'gl_FragColor = rotatedTexture;',
+        '//gl_FragColor = vec4(0.5, 0.2, 1.0, 1.0);',
 
         '//gl_FragColor = texture2D(texture1, vec2(tx,ty) );',
 

@@ -51,7 +51,8 @@ module.exports = function createLineMesh (THREE) {
     // generate two verties for each waypoint in path
     path.forEach(function (normals,point, pointIndex,list) {
       var rd;
-      if (pointIndex == 0 || pointIndex == path.length-1){
+      var width=1.0;
+      if (pointIndex == 0 || pointIndex == path.length-1 || normals[pointIndex][1] == width){
         new_path.push(path[pointIndex]);
       }
       else if ( pointIndex > 0 && pointIndex < path.length ) {
