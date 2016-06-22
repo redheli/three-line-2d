@@ -70,6 +70,10 @@ module.exports = function createLineMesh (THREE) {
         gg = gg* width * miter;
         var m_w = gg*gg-(width)*(width);
         var dd = Math.sqrt(m_w);
+        // be careful new vertex is down of last new vertex, make triangles mess
+        if(dd>rd/2.0){
+          dd = rd/2.0;
+        }
 
         var x1 = current_point.x - dd/rd * (current_point.x - pre_point.x);
         var y1 = current_point.y - dd/rd * (current_point.y - pre_point.y);
@@ -80,6 +84,9 @@ module.exports = function createLineMesh (THREE) {
 
         // point 2
         var rd2 = next_point.distanceTo( current_point );
+        if(dd>rd2/2.0){
+          dd = rd2/2.0;
+        }
 
         var x2 = current_point.x - dd/rd2 * (current_point.x - next_point.x);
         var y2 = current_point.y - dd/rd2 * (current_point.y - next_point.y);
