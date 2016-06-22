@@ -43,7 +43,7 @@ module.exports = function (THREE) {
 
 
           'vUv = uv;',
-          'vlineMiter = lineMiter;',
+          'vlineMiter = rn;',
           'vThickness = thickness;',
           'vDistance = lineDistance;',
           'float rota_angle = 0.0;',
@@ -105,15 +105,16 @@ module.exports = function (THREE) {
         'vec2 rotated = vec2(cos(vRotation) * (tx - mid) + sin(vRotation) * (ty - mid) + mid,',
         'cos(vRotation) * (ty - mid) - sin(vRotation) * (tx - mid) + mid);',
 
-          '//if( mod(rotated.x,5.0)> 0.99 ){',
-              '//discard;',
-              '//return;',
-          '//}',
-
-        ' tx = mod(vDistance,5.0);',
-          'if(tx > 2.99 || tx<0.01){',
-            'discard;',
+          'if( mod(rotated.x,5.0)> 1.99 ){',
+              'discard;',
+              'return;',
           '}',
+
+          '// use distance',
+        ' //tx = mod(vDistance,5.0);',
+            '//if(tx > 2.99 || tx<0.01){',
+                '//discard;',
+                '//}',
 
           'float m = vlineMiter + vThickness/2.0;',
         ' ty = abs(m/vThickness);  ',
