@@ -1,6 +1,6 @@
 var inherits = require('inherits');
 var getNormals = require('polyline-normals');
-var VERTS_PER_POINT = 4;
+var VERTS_PER_POINT = 2;
 
 module.exports = function createLineMesh (THREE) {
   function LineMesh (path, opt) {
@@ -148,19 +148,19 @@ module.exports = function createLineMesh (THREE) {
     path.forEach(function (normals,point, pointIndex,list) {
       var i = index;
       if(pointIndex<list.length) {
+        indexArray[c++] = i + 0;
+        indexArray[c++] = i + 1;
+        indexArray[c++] = i + 2;
+        indexArray[c++] = i + 2;
         indexArray[c++] = i + 1;
         indexArray[c++] = i + 3;
-        indexArray[c++] = i + 4;
-        indexArray[c++] = i + 3;
-        indexArray[c++] = i + 4;
-        indexArray[c++] = i + 6;
       }
 
       var index2 = index+1;
         var index3 = index+2;
         var index4 = index+3;
-        attrRotationN.setX(index,-1.0);attrRotationN.setX(index2,-1.0);
-        attrRotationN.setX(index3,1.0);attrRotationN.setX(index4,1.0);
+        // attrRotationN.setX(index,-1.0);attrRotationN.setX(index2,-1.0);
+        // attrRotationN.setX(index3,1.0);attrRotationN.setX(index4,1.0);
       if(pointIndex == 0){
         attrRotationP.setX(index,0.0);attrRotationP.setX(index2,0.0);
         //attrRotationN.setX(index,0.0);attrRotationN.setX(index2,0.0);
@@ -171,9 +171,9 @@ module.exports = function createLineMesh (THREE) {
           var dx = np.x - point[0];
           var dy = np.y - point[1];
           var angle = Math.atan2(dy,dx);
-          attrRotationP.setX(index,angle);attrRotationP.setX(index2,angle);
-            attrRotationP.setX(index3,angle);attrRotationP.setX(index4,angle);
-
+          // attrRotationP.setX(index,angle);attrRotationP.setX(index2,angle);
+          //   attrRotationP.setX(index3,angle);attrRotationP.setX(index4,angle);
+          //
           // attrRotationN.setX(index,angle);attrRotationN.setX(index2,angle);
         } // end if list length
       }// end if pointIndex 0
@@ -197,15 +197,15 @@ module.exports = function createLineMesh (THREE) {
           var dx = np.x - point[0];
           var dy = np.y - point[1];
           var angle_n = Math.atan2(dy,dx);
-          attrRotationP.setX(index,angle_p);attrRotationP.setX(index3,angle_p);
-            attrRotationP.setX(index2,angle_n);attrRotationP.setX(index4,angle_n);
+          // attrRotationP.setX(index,angle_p);attrRotationP.setX(index3,angle_p);
+          //   attrRotationP.setX(index2,angle_n);attrRotationP.setX(index4,angle_n);
           // attrRotationN.setX(index,angle_n);attrRotationN.setX(index2,angle_n);
 
         }
         else{
             // last point
-          attrRotationP.setX(index,angle_p);attrRotationP.setX(index3,angle_p);
-            attrRotationP.setX(index2,angle_p);attrRotationP.setX(index4,angle_p);
+          // attrRotationP.setX(index,angle_p);attrRotationP.setX(index3,angle_p);
+          //   attrRotationP.setX(index2,angle_p);attrRotationP.setX(index4,angle_p);
           // attrRotationN.setX(index,angle_p);attrRotationN.setX(index2,angle_p);
         }
 
@@ -213,11 +213,11 @@ module.exports = function createLineMesh (THREE) {
       }
 
       attrPosition.setXYZ(index++, point[0], point[1], 0);
+      // attrPosition.setXYZ(index++, point[0], point[1], 0);
+      // attrUV.setXY(index,0.5,0.5);
       attrPosition.setXYZ(index++, point[0], point[1], 0);
-      attrUV.setXY(index,0.5,0.5);
-      attrPosition.setXYZ(index++, point[0], point[1], 0);
-      attrPosition.setXYZ(index++, point[0], point[1], 0);
-      attrUV.setXY(index,0.0,0.0);
+      // attrPosition.setXYZ(index++, point[0], point[1], 0);
+      // attrUV.setXY(index,0.0,0.0);
 
 
       if (attrDistance) {
@@ -252,8 +252,8 @@ module.exports = function createLineMesh (THREE) {
         // d = 0.6;
 
         attrDistance.setX(dIndex++, d);
-        attrDistance.setX(dIndex++, d);
-        attrDistance.setX(dIndex++, d);
+        // attrDistance.setX(dIndex++, d);
+        // attrDistance.setX(dIndex++, d);
         attrDistance.setX(dIndex++, d);
       }
     }.bind(null,normals) );
@@ -264,13 +264,13 @@ module.exports = function createLineMesh (THREE) {
       var norm = n[0];
       var miter = n[1];
       attrNormal.setXY(nIndex++, norm[0], norm[1]);
-      attrNormal.setXY(nIndex++, norm[0], norm[1]);
-      attrNormal.setXY(nIndex++, norm[0], norm[1]);
+      // attrNormal.setXY(nIndex++, norm[0], norm[1]);
+      // attrNormal.setXY(nIndex++, norm[0], norm[1]);
       attrNormal.setXY(nIndex++, norm[0], norm[1]);
 
       attrMiter.setX(mIndex++, -miter);
-      attrMiter.setX(mIndex++, -miter);
-      attrMiter.setX(mIndex++, miter);
+      // attrMiter.setX(mIndex++, -miter);
+      // attrMiter.setX(mIndex++, miter);
       attrMiter.setX(mIndex++, miter);
     });
   };
