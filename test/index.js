@@ -16,8 +16,9 @@ var curve = require('adaptive-bezier-curve');
 var getNormals = require('polyline-normals');
 var my_path = [[0, 1], [4, 1]];
 // var my_path2 = [[0, 4], [3.5,4], [4, 4],[4.4,4.4],[8,8]];
-var my_path2 = [[0, 4],[1,4.1], [4, 3.5] ,[8,4.3],[12,10],[14,15]];
+// var my_path2 = [[0, 4],[1,4.1], [4, 3.5] ,[8,4.3],[12,10],[14,15],[10,12]];
 //var my_path2 = [[0, 4],[1,4], [4, 4]];
+var my_path2 = [[0, 4],[1,4.1], [4, 3.5] ,[8,4.3],[12,10],[14,15],[5,1]];
 var normals = getNormals(my_path, false);
 console.log(normals);
 
